@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>중1 과학 · 힘의 작용</title><style>
+:root{font-family:Arial,'Malgun Gothic',sans-serif;color:#17212f;background:#edf0f4;font-size:18px}*{box-sizing:border-box}body{margin:0}main{max-width:1040px;margin:32px auto;background:white;padding:36px 48px;border:1px solid #ccd2db}h1{font-size:1.8rem;text-align:center;margin:16px 0}h2{font-size:1.35rem}.caption{text-align:center;color:#526071}.rule{border-top:3px solid #17212f;margin:24px 0}.identity{display:flex;flex-wrap:wrap;gap:16px;padding:20px;background:#f4f6f8}.identity label{display:grid;gap:8px;flex:1;min-width:140px}input,select,button{font:inherit}input,select{width:100%;padding:12px;border:1px solid #8793a3;border-radius:4px}button{padding:12px 20px;border:1px solid #17212f;background:#fff;color:#17212f;border-radius:4px;cursor:pointer;min-height:48px}button.primary{background:#17212f;color:white}button:disabled{opacity:.5;cursor:default}button:focus-visible,a:focus-visible{outline:3px solid #216ce0;outline-offset:3px}.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0}.sticky{position:sticky;top:0;background:white;border-bottom:1px solid #ccd2db;padding:12px 0;z-index:2}.progress{height:6px;background:#e0e5ec;margin-top:10px}.progress div{height:100%;background:#216ce0;width:0}.nav{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:20px 0}.nav button{padding:8px;min-width:0}.nav button.done{background:#17212f;color:white}.question{padding:26px 0;border-bottom:1px solid #bcc5d0;scroll-margin-top:135px}.question header{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:12px}.stem,.explanation{white-space:pre-wrap;line-height:1.8;overflow-wrap:anywhere}.options{display:grid;gap:8px;margin-top:18px}.option{display:flex;align-items:flex-start;gap:10px;border:1px solid transparent;padding:10px;cursor:pointer;line-height:1.6}.option:has(input:checked){border-color:#216ce0;background:#eff5ff}.option input{width:22px;height:22px;flex-shrink:0;margin:4px 0;accent-color:#216ce0}.review{background:#f4f6f8;padding:18px;margin-top:16px}.correct{color:#176240}.wrong{color:#b42232}.score{font-size:2.6rem;font-weight:bold}.summary{text-align:center;padding:26px;border:2px solid #17212f}.muted{color:#526071;font-size:.9rem}.error{color:#b42232}.hidden{display:none!important}.preview-img{display:block;width:100%;border:1px solid #ccd2db;margin:16px 0}.bottom{margin-top:26px}dialog{max-width:650px;width:92%;border:1px solid #8793a3;padding:26px}dialog::backdrop{background:#17212faa}@media(max-width:650px){:root{font-size:17px}main{margin:0;padding:22px 16px;border:0}.nav{grid-template-columns:repeat(6,1fr)}h1{font-size:1.45rem}.identity{padding:14px}.sticky{top:0}}@media print{body{background:white}main{border:0;margin:0;max-width:none}.toolbar,.nav,.sticky,#start,.bottom,#imageBox{display:none!important}.question{break-inside:avoid}}
+</style></head><body><main><div class="caption">1학년 2학기 중간고사 대비 · 과학</div><h1>5단원 &lt;힘의 작용&gt;</h1><p class="caption">30문항 · 100점</p><div class="rule"></div>
+<section id="start"><form id="identityForm"><div class="identity"><label>학년·반<select id="classNo"><option value="1">1학년 1반</option><option value="2">1학년 2반</option><option value="3">1학년 3반</option><option value="4">1학년 4반</option><option value="5">1학년 5반</option><option value="6">1학년 6반</option></select></label><label>번호<input id="studentNo" type="number" min="1" max="99" required inputmode="numeric"></label><label>이름<input id="studentName" maxlength="20" required autocomplete="off"></label></div><p>모든 문제의 답을 고른 뒤 제출하세요. 제출하면 점수와 풀이를 확인할 수 있습니다.</p><p class="muted" id="connectionInfo"></p><button class="primary" type="submit">시험 시작</button></form></section>
+<section id="exam" class="hidden"><div class="sticky"><div class="toolbar"><strong id="studentInfo"></strong><span id="count">0 / 30문항 응답</span><button id="submit" class="primary">답안 제출</button></div><div class="progress"><div id="progress"></div></div></div><p id="syncState" role="status" aria-live="polite"></p><div class="toolbar"><button id="retry" class="hidden">전송 다시 시도</button></div><section id="result" class="hidden" tabindex="-1"><div class="summary"><h2>시험 결과</h2><div class="score" id="score"></div><p id="correctCount"></p><p id="resultIdentity"></p></div><div class="toolbar"><button id="capture" class="primary">문제·풀이 사진 만들기</button><button id="print">결과 인쇄 / PDF</button><button id="reset">처음부터 다시 풀기</button></div><div id="imageBox" class="hidden" aria-live="polite"><p id="captureStatus"></p><div class="toolbar"><button id="saveAllPhotos" class="primary hidden">사진 전체 저장</button><button id="downloadAllPhotos" class="hidden">전체 PNG 다운로드</button></div><p id="photoHelp">사진 전체 저장을 누르면 기기의 공유 메뉴가 열립니다. 사진 저장 항목 또는 저장할 앱을 선택하세요.</p><div id="imagePages"></div></div><p>아래에서 문항별 정답과 풀이를 확인하세요.</p></section><nav class="nav" id="nav" aria-label="문항 바로가기"></nav><div id="questions"></div><div class="bottom"><button id="submitBottom" class="primary">답안 제출</button></div></section>
+<dialog id="confirmDialog"><h2>답안을 제출할까요?</h2><p>제출한 뒤에는 답을 바꿀 수 없습니다. 정답과 풀이가 공개됩니다.</p><div class="toolbar"><button id="cancelSubmit">계속 풀기</button><button id="confirmSubmit" class="primary">제출하고 결과 보기</button></div></dialog>
+<script>
+// 교사 설정: Google Apps Script를 배포한 /exec 주소를 넣으세요.
+const SHEETS_URL = '';
+const TEST_ID = 'force-midterm-v1';
+const QUESTIONS = [{"id": 1, "text": "힘에 대한 설명으로 옳은 것은?", "options": ["힘은 움직이는 물체에만 작용한다.", "힘은 물체의 운동 상태만 변화시킬 수 있다.", "힘은 물체의 모양이나 운동 상태를 변화시킬 수 있다.", "정지한 물체에는 여러 힘이 동시에 작용할 수 없다.", "물체가 움직이는 방향과 힘의 방향은 항상 같다."], "answer": 3, "points": 3, "explanation": "힘은 물체의 모양이나 운동 상태를 변화시키는 원인이다. 정지한 물체에도 여러 힘이 동시에 작용할 수 있다."}, {"id": 2, "text": "질량이 3 kg인 물체가 지표면에서 받는 중력의 크기는?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)", "options": ["3 N", "10 N", "20 N", "30 N", "300 N"], "answer": 4, "points": 3, "explanation": "1 kg의 물체가 받는 중력의 크기는 10 N이므로 3 kg의 물체가 받는 중력의 크기는 (3 kg)×10=30 N이다."}, {"id": 3, "text": "책상 위에 책이 정지해 있다. 책에 작용하는 중력의 크기가 20 N일 때, 책상이 책을 위로 미는 힘의 크기는?", "options": ["0", "10 N", "20 N", "30 N", "40 N"], "answer": 3, "points": 3, "explanation": "책이 정지해 있으므로 아래쪽 중력 20 N과 위쪽 떠받치는 힘이 평형을 이룬다. 따라서 떠받치는 힘의 크기는 20 N이다."}, {"id": 4, "text": "한 물체에 오른쪽으로 12 N, 왼쪽으로 5 N의 힘이 동시에 작용한다. 이 두 힘의 합력은?", "options": ["오른쪽으로 7 N", "왼쪽으로 7 N", "오른쪽으로 17 N", "왼쪽으로 17 N", "0"], "answer": 1, "points": 3, "explanation": "반대 방향의 힘이므로 합력의 크기는 큰 힘에서 작은 힘의 크기를 뺀 값인 12 N-5 N=7 N이다. 더 큰 힘이 오른쪽이므로 합력의 방향은 오른쪽이다."}, {"id": 5, "text": "하나의 물체에 두 힘이 동시에 작용할 때, 다음 중 두 힘이 평형을 이루는 경우는?", "options": ["오른쪽으로 5 N, 왼쪽으로 3 N", "오른쪽으로 5 N, 왼쪽으로 5 N", "오른쪽으로 5 N, 오른쪽으로 5 N", "오른쪽으로 3 N, 왼쪽으로 5 N", "오른쪽으로 5 N, 왼쪽으로 10 N"], "answer": 2, "points": 3, "explanation": "두 힘이 평형을 이루려면 크기가 같고 방향이 반대여야 한다. 오른쪽 5 N과 왼쪽 5 N이 이에 해당한다."}, {"id": 6, "text": "평평한 바닥 위의 상자를 오른쪽으로 밀었지만 상자는 계속 정지해 있다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?\n\n<보기>\nㄱ. 상자에는 중력이 작용한다.\nㄴ. 상자를 미는 힘과 반대 방향으로 마찰력이 작용한다.\nㄷ. 상자에 작용하는 모든 힘의 크기는 항상 서로 같다.\nㄹ. 상자에 작용하는 알짜힘은 0이다.", "options": ["ㄱ, ㄴ", "ㄱ, ㄹ", "ㄴ, ㄷ", "ㄱ, ㄴ, ㄹ", "ㄴ, ㄷ, ㄹ"], "answer": 4, "points": 3, "explanation": "ㄱ: 정지한 상자에도 아래쪽으로 중력이 작용한다.\nㄴ: 미는 힘과 반대 방향의 마찰력이 수평 방향에서 평형을 이룬다.\nㄷ: 평형은 알짜힘이 0이라는 뜻이며, 모든 힘의 크기가 서로 같다는 뜻은 아니다.\nㄹ: 정지 상태를 유지하므로 알짜힘은 0이다.\n따라서 옳은 것은 ㄱ, ㄴ, ㄹ이다."}, {"id": 7, "text": "용수철에 추를 매달았더니 용수철이 2 cm 늘어났을 때 탄성력의 크기가 4 N이었다. 같은 용수철을 6 cm 늘였을 때 탄성력의 크기는?", "options": ["2 N", "4 N", "6 N", "8 N", "12 N"], "answer": 5, "points": 3, "explanation": "같은 용수철에서는 늘어난 길이와 탄성력의 크기가 비례한다. 6 cm는 2 cm의 3배이므로 탄성력도 (4 N)×3=12 N이다."}, {"id": 8, "text": "물속에 완전히 잠긴 물체에 아래쪽으로 중력 15 N, 위쪽으로 부력 6 N이 작용한다. 다른 힘은 작용하지 않는다. 이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 지구 중심 방향을 아래쪽으로 한다.)\n\n<보기>\nㄱ. 중력과 부력은 같은 방향으로 작용한다.\nㄴ. 알짜힘의 크기는 9 N이다.\nㄷ. 알짜힘의 방향은 아래쪽이다.\nㄹ. 중력과 부력은 평형을 이룬다.", "options": ["ㄷ", "ㄹ", "ㄴ, ㄷ", "ㄱ, ㄴ, ㄹ", "ㄴ, ㄷ, ㄹ"], "answer": 3, "points": 3, "explanation": "ㄱ: 중력은 지구 중심 방향인 아래쪽, 부력은 위쪽으로 서로 반대 방향이다.\nㄴ, ㄷ: 알짜힘의 크기는 15 N-6 N=9 N이며 더 큰 힘인 중력의 방향, 즉 아래쪽이다.\nㄹ: 두 힘의 크기가 달라 평형을 이루지 않는다.\n따라서 옳은 것은 ㄴ, ㄷ이다."}, {"id": 9, "text": "오른쪽으로 운동하고 있는 물체에 운동 방향과 같은 방향으로 알짜힘이 계속 작용한다. 물체의 운동 상태 변화로 옳은 것은?", "options": ["정지한다.", "속력이 증가한다.", "속력이 감소한다.", "운동 방향만 변한다.", "속력과 운동 방향이 모두 변하지 않는다."], "answer": 2, "points": 3, "explanation": "알짜힘이 운동 방향과 같은 방향으로 작용하면 물체의 속력이 증가한다."}, {"id": 10, "text": "질량이 5 kg인 상자가 수평한 바닥 위에 정지해 있다. 상자에 작용하는 중력과 떠받치는 힘의 크기를 옳게 짝 지은 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)", "options": ["중력 5 N, 떠받치는 힘 5 N", "중력 10 N, 떠받치는 힘 10 N", "중력 50 N, 떠받치는 힘 0", "중력 50 N, 떠받치는 힘 50 N", "중력 50 N, 떠받치는 힘 100 N"], "answer": 4, "points": 3, "explanation": "중력의 크기는 (5 kg)×10=50 N이다. 상자가 바닥 위에서 정지해 있으므로 중력과 떠받치는 힘이 평형을 이루어 떠받치는 힘의 크기도 50 N이다."}, {"id": 11, "text": "오른쪽으로 운동 중인 물체에 왼쪽 방향의 일정한 알짜힘이 계속 작용한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?\n\n<보기>\nㄱ. 힘을 받는 순간 즉시 정지한다.\nㄴ. 처음에는 물체의 속력이 감소한다.\nㄷ. 힘을 받는 처음 순간의 운동 방향은 왼쪽이다.", "options": ["ㄱ", "ㄴ", "ㄱ, ㄴ", "ㄱ, ㄷ", "ㄴ, ㄷ"], "answer": 2, "points": 3, "explanation": "ㄴ: 운동 방향과 반대 방향의 알짜힘이 작용하므로 처음에는 속력이 감소한다.\nㄱ, ㄷ: 운동 방향과 반대 방향으로 알짜힘이 작용하면 속력이 점차 감소하지만, 즉시 정지하거나 운동 방향이 곧바로 바뀌지는 않는다."}, {"id": 12, "text": "한 물체에 오른쪽으로 15 N의 힘 A, 왼쪽으로 8 N의 힘 B, 왼쪽으로 3 N의 힘 C가 동시에 작용한다. 이 물체에 작용하는 합력의 방향과 크기로 가장 적절한 것은?", "options": ["오른쪽으로 4 N", "왼쪽으로 4 N", "오른쪽으로 10 N", "왼쪽으로 10 N", "0"], "answer": 1, "points": 3, "explanation": "왼쪽으로 작용하는 힘 B, C의 합력의 크기는 8 N+3 N=11 N이다. 힘 A는 오른쪽으로 작용하므로 15 N- 11 N=4 N이다."}, {"id": 13, "text": "질량이 4 kg인 상자가 수평한 바닥 위에 놓여 있다. 상자를 오른쪽으로 15 N의 힘으로 밀었더니 오른쪽으로 운동하고 있으며, 이때 상자에 왼쪽으로 5 N의 마찰력이 작용한다. 상자에 작용하는 합력의 크기와 방향은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)", "options": ["오른쪽으로 10 N", "왼쪽으로 10 N", "오른쪽으로 20 N", "왼쪽으로 20 N", "0"], "answer": 1, "points": 3, "explanation": "수평 방향에서 오른쪽 15 N, 왼쪽 5 N의 힘이 작용하므로 합력의 크기는 15 N-5 N=10 N, 방향은 오른쪽이다. 위아래 방향의 힘은 서로 평형이다."}, {"id": 14, "text": "같은 용수철에 물체 A를 매달면 3 cm, 물체 B를 매달면 9 cm 늘어난 상태로 각각 정지한다. A의 질량은 0.2 kg이다. 이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)\n\n<보기>\nㄱ. A에 작용하는 중력의 크기는 2 N이다.\nㄴ. A에 작용하는 탄성력의 크기는 2 N이다.\nㄷ. B에 작용하는 탄성력의 크기는 6 N이다.\nㄹ. B의 질량은 1.8 kg이다.", "options": ["ㄱ, ㄴ", "ㄴ, ㄷ", "ㄴ, ㄹ", "ㄱ, ㄴ, ㄷ", "ㄱ, ㄷ, ㄹ"], "answer": 4, "points": 3, "explanation": "ㄱ, ㄴ: A의 중력의 크기는 (0.2 kg)×10=2 N이고, 물체가 정지해 있으므로 탄성력의 크기도 2 N이다.\nㄷ: B에서 늘어난 길이가 A에서의 3배이므로 B의 탄성력은 (2 N)×3=6 N이다.\nㄹ: B의 중력의 크기는 6 N이므로 질량은 (6 N)/10=0.6 kg이다.\n따라서 옳은 것은 ㄱ, ㄴ, ㄷ이다."}, {"id": 15, "text": "물체가 물속에 완전히 잠긴 채 줄에 매달려 정지해 있다. 아래쪽으로 중력 20 N, 위쪽으로 부력 8 N과 줄이 당기는 힘이 작용한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?\n\n<보기>\nㄱ. 줄이 당기는 힘의 크기는 12 N이다.\nㄴ. 물체에 작용하는 알짜힘은 아래쪽으로 12 N이다.\nㄷ. 부력과 줄이 당기는 힘의 크기의 합은 20 N이다.\nㄹ. 물체에 작용하는 중력은 물속에서 8 N으로 줄어든다.", "options": ["ㄱ, ㄷ", "ㄱ, ㄹ", "ㄴ, ㄷ", "ㄴ, ㄹ", "ㄷ, ㄹ"], "answer": 1, "points": 3, "explanation": "ㄱ: 정지해 있으므로 물체는 힘의 평형을 이루고 있다. 줄이 당기는 힘의 크기는 20 N-8 N=12 N이다.\nㄴ: 정지 상태를 유지하므로 알짜힘은 0이다.\nㄷ: 부력과 줄이 당기는 힘은 같은 방향이므로, 두 힘의 합력은 12 N+8 N=20 N이다.\nㄹ: 물체에 작용하는 중력의 크기는 20 N으로, 물 속에 잠기더라도 그 크기는 변하지 않는다.\n따라서 옳은 것은 ㄱ, ㄷ이다."}, {"id": 16, "text": "수평한 바닥 위에 질량 6 kg인 상자가 정지해 있다. 사람이 상자를 수직 위쪽으로 20 N의 힘으로 당기지만 상자는 바닥에서 떨어지지 않았다. 이때 바닥이 상자에 작용하는 떠받치는 힘의 크기는?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)", "options": ["20 N", "40 N", "60 N", "80 N", "100 N"], "answer": 2, "points": 3, "explanation": "중력의 크기는 (6 kg)×10=60 N이다. 위쪽으로 사람이 당기는 힘 20 N과 떠받치는 힘이 작용하며 상자가 정지해 있으므로, 떠받치는 힘과 당기는 힘의 합력의 크기는 중력과 같다. 따라서 떠받치는 힘의 크기는 60 N-20 N=40 N이다."}, {"id": 17, "text": "오른쪽으로 일정한 속력으로 움직이는 상자에 사람이 오른쪽으로 12 N의 힘을 가하고 있다. 상자에 작용하는 다른 수평 방향의 힘이 마찰력뿐이라면 마찰력의 크기와 방향은?", "options": ["오른쪽으로 6 N", "왼쪽으로 6 N", "오른쪽으로 12 N", "왼쪽으로 12 N", "0"], "answer": 4, "points": 3, "explanation": "일정한 속력으로 같은 방향으로 운동하므로 수평 방향 알짜힘은 0이다. 따라서 오른쪽 12 N을 상쇄하는 왼쪽 12 N의 마찰력이 작용한다."}, {"id": 18, "text": "다음은 운동 중인 물체의 운동 방향과 알짜힘의 방향에 대한 설명이다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?\n\n<보기>\nㄱ. 운동 방향과 같은 방향으로 알짜힘이 작용하면 속력이 감소한다.\nㄴ. 운동 방향과 반대 방향으로 알짜힘이 작용하면 처음에는 속력이 감소한다.\nㄷ. 알짜힘이 운동 방향에 수직으로 작용하면 운동 방향만 변한다.\nㄹ. 알짜힘이 운동 방향과 비스듬하면 운동 상태는 변하지 않는다.", "options": ["ㄱ", "ㄷ", "ㄹ", "ㄴ, ㄷ", "ㄷ, ㄹ"], "answer": 4, "points": 3, "explanation": "ㄱ: 같은 방향으로 작용하면 속력이 증가한다.\nㄴ: 반대 방향이면 처음에는 속력이 감소한다.\nㄷ: 운동 방향에 수직인 알짜힘은 운동 방향을 변화시킨다.\nㄹ: 운동 방향에 비스듬하게 작용하는 알짜힘도 운동 상태를 변화시킨다.\n따라서 옳은 것은 ㄴ, ㄷ이다."}, {"id": 19, "text": "수평한 바닥 위에 놓인 질량 5 kg인 상자를 오른쪽으로 20 N의 힘을 작용하여 밀었지만 상자는 계속 정지해 있다. 상자에는 미는 힘, 중력, 떠받치는 힘, 마찰력만 작용한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)\n\n<보기>\nㄱ. 상자에 작용하는 중력의 크기는 50 N이다.\nㄴ. 떠받치는 힘의 크기는 20 N이다.\nㄷ. 마찰력은 왼쪽으로 작용하며, 크기는 20 N이다.\nㄹ. 상자에 작용하는 알짜힘은 0이다.", "options": ["ㄱ, ㄴ", "ㄱ, ㄹ", "ㄴ, ㄷ", "ㄱ, ㄷ, ㄹ", "ㄴ, ㄷ, ㄹ"], "answer": 4, "points": 3, "explanation": "ㄱ: 중력의 크기는 (5 kg)×10=50 N이다.\nㄴ: 중력과 떠받치는 힘은 평형을 이루고 있으므로, 떠받치는 힘의 크기는 50 N이다.\nㄷ: 상자를 미는 힘과 마찰력은 서로 평형 이루고 있으므로, 마찰력의 방향은 왼쪽이며 크기는 20 N이다.\nㄹ: 정지 상태를 유지하므로 알짜힘은 0이다.\n따라서 옳은 것은 ㄱ, ㄷ, ㄹ이다."}, {"id": 20, "text": "어떤 용수철을 2 cm 늘이는 데 3 N의 힘이 필요하다. 이 용수철에 질량 0.9 kg인 물체를 매달아 정지시켰을 때 용수철이 늘어난 길이는?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)", "options": ["3 cm", "4 cm", "6 cm", "9 cm", "12 cm"], "answer": 3, "points": 3, "explanation": "0.9 kg 물체의 중력의 크기는 (0.9 kg)×10=9 N이다. 탄성력의 크기는 물체의 무게와 같으므로 9 N이다. 9 N은 3 N의 3배이므로 늘어난 길이도 2 cm의 3배인 6 cm이다."}, {"id": 21, "text": "질량 4 kg인 물체를 줄에 매달아 물속에 완전히 잠기게 하였더니 정지하였다. 줄은 위쪽으로 25 N의 힘으로 물체를 당기고 있다. 물체에는 중력, 부력, 줄이 당기는 힘만 작용한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)\n\n<보기>\nㄱ. 중력의 크기는 25 N이다.\nㄴ. 부력의 크기는 15 N이다.\nㄷ. 부력의 크기는 중력의 크기와 같다.", "options": ["ㄱ", "ㄴ", "ㄱ, ㄴ", "ㄱ, ㄷ", "ㄴ, ㄷ"], "answer": 2, "points": 4, "explanation": "ㄱ: 중력의 크기는 (4 kg)×10=40 N이다.\nㄴ: 줄이 당기는 힘과 부력의 합력이 중력과 평형을 이루므로, 부력의 크기는 40 N-25 N=15 N이다.\nㄷ: 부력의 크기는 15 N, 중력의 크기는 40 N으로 같지 않다.\n따라서 옳은 것은 ㄴ이다."}, {"id": 22, "text": "질량 8 kg인 상자를 수평한 바닥 위에서 위쪽으로 30 N, 오른쪽으로 25 N의 힘으로 동시에 당긴다. 상자는 바닥에서 떨어지지 않고 오른쪽으로 일정한 속력으로 움직인다. 다른 힘은 중력, 떠받치는 힘, 마찰력뿐이다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)\n\n<보기>\nㄱ. 바닥이 상자를 떠받치는 힘의 크기는 50 N이다.\nㄴ. 마찰력은 왼쪽으로 25 N의 크기로 작용한다.\nㄷ. 알짜힘은 오른쪽으로 25 N의 크기로 작용한다.", "options": ["ㄱ", "ㄷ", "ㄱ, ㄴ", "ㄴ, ㄷ", "ㄱ, ㄴ, ㄷ"], "answer": 3, "points": 4, "explanation": "ㄱ: 중력의 크기는 (8 kg)×10=80 N이다. 물체를 위로 당기는 힘과 떠받치는 힘의 합력이 중력과 서로 평형을 이루므로, 바닥이 상자를 떠받치는 힘의 크기는 80 N-30 N=50 N이다.\nㄴ: 같은 방향으로 일정한 속력으로 운동하고 있으므로, 알짜힘은 0이며 마찰력은 왼쪽으로 25 N의 크기로 작용한다.\nㄷ: 물체는 일정한 속력으로 운동하고 있으므로 알짜힘은 0이다.\n따라서 옳은 것은 ㄱ, ㄴ이다."}, {"id": 23, "text": "수평한 바닥 위의 상자에 오른쪽으로 30 N의 힘을 가했더니 상자가 오른쪽으로 움직였다. 이때 마찰력의 크기는 10 N이다. 이후 오른쪽으로 가하는 힘만 15 N으로 바꾸었고 마찰력의 크기는 여전히 10 N이라고 하자. 두 경우를 비교한 설명으로 옳은 것은?", "options": ["두 경우 모두 알짜힘은 0이다.", "처음 알짜힘은 오른쪽 20 N, 나중 알짜힘은 오른쪽 5 N이다.", "처음 알짜힘은 오른쪽 40 N, 나중 알짜힘은 오른쪽 25 N이다.", "처음 알짜힘은 왼쪽 20 N, 나중 알짜힘은 왼쪽 5 N이다.", "힘의 크기가 줄었으므로 물체의 속력은 감소한다."], "answer": 2, "points": 4, "explanation": "처음 알짜힘의 크기는 30 N-10 N=20 N이며 방향은 오른쪽이다. 나중 알짜힘의 크기는 15 N-10 N=5 N이며 방향은 오른쪽이다. 가하는 힘의 크기가 줄어들어도 운동 방향과 알짜힘의 방향이 일치하면 속력은 점차 증가한다."}, {"id": 24, "text": "질량 3 kg인 물체 A와 5 kg인 물체 B가 수평한 바닥 위에서 정지해 있다. A를 수직 위쪽으로 10 N, B를 수직 위쪽으로 20 N의 힘으로 당겨도 두 물체는 계속 정지해 있다. 다른 힘은 중력과 바닥이 물체를 떠받치는 힘뿐이다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)\n\n<보기>\nㄱ. 바닥이 물체 A를 떠받치는 힘의 크기는 30 N이다.\nㄴ. 바닥이 물체 B를 떠받치는 힘의 크기는 30 N이다.\nㄷ. A의 무게는 B의 무게보다 크다.\nㄹ. A에 작용하는 알짜힘은 위쪽으로 작용하며 크기는 10 N이다.", "options": ["ㄴ", "ㄷ", "ㄱ, ㄴ, ㄷ", "ㄱ, ㄴ, ㄹ", "ㄴ, ㄷ, ㄹ"], "answer": 1, "points": 4, "explanation": "ㄱ: A의 중력의 크기는 (3 kg)×10=30 N이므로, 바닥이 물체 A를 떠받치는 힘은 30 N-10 N=20 N이다.\nㄴ: B의 중력의 크기는 (5 kg)×10=50 N이므로, 바닥이 물체 B를 떠받치는 힘은 50 N-20 N=30 N이다.\nㄷ: A의 중력의 크기는 30 N, B의 중력의 크기는 50 N이므로 A가 B보다 작다.\nㄹ: A는 정지해 있으므로 알짜힘은 0이다.\n따라서 옳은 것은 ㄴ이다."}, {"id": 25, "text": "같은 물체를 물에 넣어 다음과 같이 하였다. \n<보기>\n(가) 물체의 일부만 물에 잠긴 상태에서 손으로 잡고 있다. \n(나) 물체를 더 깊이 넣어 물에 잠긴 부분의 부피를 점차 증가시킨다. \n(다) 물체 전체를 물속에 완전히 잠기게 한다. \n이에 대한 설명으로 가장 적절한 것은?", "options": ["(가)에서 (나)로 갈 때 부력의 크기는 작아진다.", "(나)에서 (다)로 갈 때 부력의 크기는 작아진다.", "(가), (나), (다)에서 부력의 크기는 항상 같다.", "(가)보다 (다)에서 부력의 크기가 더 크다.", "부력은 물체에 작용하는 중력과 항상 크기가 같다."], "answer": 4, "points": 4, "explanation": "물에 잠긴 부분의 부피가 커질수록 부력이 커진다. (가)보다 전체가 잠긴 (다)에서 물에 잠긴 부피가 더 크므로 부력도 더 크다."}, {"id": 26, "text": "질량 3 kg인 물체를 용수철에 매달면 공기 중에서 6 cm 늘어난 상태로 정지한다. 물속에 완전히 잠기게 하면 4 cm 늘어난 상태로 정지한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이며 공기의 부력은 무시한다.)\n\n<보기>\nㄱ. 공기 중에서 용수철의 탄성력의 크기는 30 N이다.\nㄴ. 물속에서 용수철의 탄성력의 크기는 20 N이다.\nㄷ. 물속에서 작용하는 부력의 크기는 20 N이다.\nㄹ. 물속에서 물체의 무게는 30 N이다.", "options": ["ㄱ", "ㄷ", "ㄴ, ㄹ", "ㄱ, ㄴ, ㄷ", "ㄱ, ㄴ, ㄹ"], "answer": 5, "points": 4, "explanation": "ㄱ: 중력의 크기는 (3 kg)×10=30 N이고, 탄성력의 크기도 중력과 같은 30 N이다.\nㄴ: 늘어난 길이가 6 cm일 때 탄성력의 크기는 30 N이므로, 물속에서의 탄성력의 크기는 20 N이다.\nㄷ: 부력의 크기는 물체의 무게에서 탄성력을 뺀 값이므로, 부력의 크기는 30 N-20 N=10 N이다.\nㄹ: 물체가 물에 잠기는 것과 관계없이 물체의 무게는 30 N이다.\n따라서 옳은 것은 ㄱ, ㄴ, ㄹ이다."}, {"id": 27, "text": "오른쪽으로 운동 중인 물체에 알짜힘이 (가) 운동 방향과 같은 방향, (나) 운동 방향에 수직인 방향, (다) 운동 방향과 비스듬한 방향으로 각각 작용한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?\n\n<보기>\nㄱ. (가)에서는 속력이 증가한다.\nㄴ. (나)에서는 운동 방향이 변한다.\nㄷ. (다)에서는 운동 상태가 변하지 않는다.\nㄹ. 세 경우 모두 속력만 변하고 운동 방향은 변하지 않는다.", "options": ["ㄱ, ㄴ", "ㄴ, ㄷ", "ㄴ, ㄹ", "ㄱ, ㄴ, ㄷ", "ㄱ, ㄷ, ㄹ"], "answer": 1, "points": 4, "explanation": "ㄱ: 운동 방향과 같은 방향의 알짜힘은 속력을 증가시킨다.\nㄴ: 운동 방향에 수직인 알짜힘은 운동 방향을 변화시킨다.\nㄷ: 운동 방향에 비스듬한 알짜힘도 운동 상태를 변화시킨다.\nㄹ: (나)와 (다)에서 운동 방향이 변하므로 틀리다.\n따라서 옳은 것은 ㄱ, ㄴ이다."}, {"id": 28, "text": "사람이 수평한 바닥 위의 질량이 7 kg인 상자를 오른쪽으로 25 N의 힘으로 밀면서 동시에 수직 위쪽으로 20 N의 힘으로 당기고 있다. 상자는 오른쪽으로 일정한 속력으로 움직이고 있다. 상자에 작용하는 다른 힘은 중력, 바닥이 상자를 떠받치는 힘, 마찰력뿐이라면, 이에 대한 설명으로 옳은 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)", "options": ["중력의 크기는 50 N이다.", "바닥이 상자를 떠받치는 힘의 크기는 50 N이다.", "마찰력은 오른쪽으로 작용한다.", "마찰력의 크기는 20 N이다.", "알짜힘은 오른쪽으로 작용하며, 크기는 25 N이다."], "answer": 2, "points": 4, "explanation": "중력의 크기는 (7 kg)×10=70 N이다. 바닥이 상자를 떠받치는 힘과 사람이 위로 작용하는 힘의 합력은 중력과 평형을 이루므로, 떠받치는 힘의 크기는 70 N-20 N=50 N이다. 상자는 일정한 방향과 속력으로 운동하고 있으므로 알짜힘은 0이며, 마찰력은 왼쪽으로 25 N의 크기로 작용한다."}, {"id": 29, "text": "질량 2 kg인 물체 A를 용수철에 매달면 공기 중에서 5 cm 늘어난 상태로 정지한다. 물속에 완전히 잠기게 하면 3 cm 늘어난 상태로 정지한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이며, 공기 중에서의 부력은 무시한다.)\n\n<보기>\nㄱ. 공기 중에서 용수철의 탄성력의 크기는 20 N이다.\nㄴ. 물속에서 용수철의 탄성력의 크기는 12 N이다.\nㄷ. 물속에서 물체에 작용하는 부력의 크기는 8 N이다.", "options": ["ㄱ", "ㄷ", "ㄱ, ㄴ", "ㄴ, ㄷ", "ㄱ, ㄴ, ㄷ"], "answer": 5, "points": 4, "explanation": "ㄱ: 중력의 크기는 (2 kg)×10=20 N이며, 탄성력과 평형을 이루므로 탄성력의 크기도 20 N이다.\nㄴ: 물속에서의 용수철의 늘어난 길이는 공기 중에서의 늘어난 길이의 3/5가 되었으므로, 탄성력의 크기는 20 N의 3/5인 12 N이다.\nㄷ: 부력, 중력, 탄성력이 평형을 이루고 있으므로, 부력의 크기는 20 N-12 N=8 N이다.\n따라서 옳은 것은 ㄱ, ㄴ, ㄷ이다."}, {"id": 30, "text": "질량 6 kg인 상자가 수평한 바닥 위에서 오른쪽으로 운동하고 있다. 사람이 상자의 오른쪽으로 크기가 30 N의 힘을 작용하고 있으며, 왼쪽으로 마찰력 20 N이 작용한다.\n이에 대한 설명으로 옳은 것을 <보기>에서 있는 대로 고른 것은?(단, 질량 1 kg인 물체에 작용하는 중력은 10 N이다.)\n\n<보기>\nㄱ. 상자에 작용하는 중력의 크기는 60 N이다.\nㄴ. 물체의 속력은 감소하고 있다.\nㄷ. 물체에 작용하는 합력의 크기는 10 N이다.", "options": ["ㄱ", "ㄷ", "ㄱ, ㄴ", "ㄱ, ㄷ", "ㄴ, ㄷ"], "answer": 4, "points": 4, "explanation": "ㄱ: 중력의 크기는 (6 kg)×10=60 N이다.\nㄴ: 알짜힘의 방향은 큰 힘의 방향인 오른쪽이므로 운동 방향과 같다. 그러므로 속력은 증가하고 있다.\nㄷ: 물체에 작용하는 합력의 크기는 30 N-20 N=10 N이다.\n따라서 옳은 것은 ㄱ, ㄷ이다."}];
+const $=id=>document.getElementById(id);
+let answers=Array(QUESTIONS.length).fill(0),student=null,submitted=false,revision=0,debounce=null,busy=false,queued=false,pending=null,score=0,correct=0;
+let lastSendAt=0,retryCount=0,ackRevision=-1,finalSaved=false,configBlocked=false,imageUrls=[],photoFiles=[],downloadingPhotos=false;
+const MAX_AUTO_RETRIES=8;
+const sessionId=globalThis.crypto?.randomUUID?.()||('s'+Date.now()+Math.random().toString(36).slice(2));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const connected=/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(SHEETS_URL);
+$('connectionInfo').textContent=connected?'고른 답은 자동 전송됩니다.':'스프레드시트 미연결: 문제 풀이와 결과 이미지 저장은 사용할 수 있습니다.';
+if(connected)$('connectionInfo').textContent='고른 답은 교사용 스프레드시트에 자동 전송됩니다. 이 기기에서는 새로고침하면 답안이 초기화됩니다.';
+$('identityForm').onsubmit=e=>{e.preventDefault();const number=Number($('studentNo').value),name=$('studentName').value.trim();if(!Number.isInteger(number)||number<1||number>99||!name){alert('번호(1~99)와 이름을 확인하세요.');return}student={classNo:Number($('classNo').value),number,name};$('start').classList.add('hidden');$('exam').classList.remove('hidden');$('studentInfo').textContent=`1학년 ${student.classNo}반 ${number}번 ${name}`;render();update();schedule();};
+function render(){ $('nav').innerHTML=QUESTIONS.map(q=>`<button type="button" id="nav${q.id}" aria-label="${q.id}번 문제">${q.id}</button>`).join('');$('questions').innerHTML=QUESTIONS.map((q,i)=>`<article class="question" id="q${q.id}"><header><span>${q.id}번</span><span>${q.points}점</span></header><div class="stem">${esc(q.text)}</div><fieldset class="options" style="border:0;padding:0"><legend class="hidden">${q.id}번 답 선택</legend>${q.options.map((o,j)=>`<label class="option"><input type="radio" name="q${q.id}" value="${j+1}" aria-label="${q.id}번 문제 ${j+1}번 선택지"><span>${'①②③④⑤'[j]} ${esc(o)}</span></label>`).join('')}</fieldset><div class="review hidden" id="review${q.id}"></div></article>`).join('');QUESTIONS.forEach((q,i)=>{$('nav'+q.id).onclick=()=>$( 'q'+q.id).scrollIntoView({behavior:'smooth'});document.querySelectorAll(`input[name=q${q.id}]`).forEach(input=>input.onchange=()=>{if(submitted)return;answers[i]=Number(input.value);revision++;update();schedule();});});}
+function update(){const n=answers.filter(Boolean).length;$('count').textContent=`${n} / ${QUESTIONS.length}문항 응답`;$('progress').style.width=n/QUESTIONS.length*100+'%';QUESTIONS.forEach((q,i)=>$('nav'+q.id).classList.toggle('done',!!answers[i]));}
+function requestSubmit(){const missing=QUESTIONS.filter((q,i)=>!answers[i]);if(missing.length){alert(`아직 답을 고르지 않은 문항: ${missing.map(q=>q.id).join(', ')}번`);$('q'+missing[0].id).scrollIntoView({behavior:'smooth'});return}$('confirmDialog').showModal();}
+$('submit').onclick=requestSubmit;$('submitBottom').onclick=requestSubmit;$('cancelSubmit').onclick=()=>$('confirmDialog').close();
+$('confirmSubmit').onclick=()=>{$('confirmDialog').close();submitted=true;revision++;correct=0;score=0;QUESTIONS.forEach((q,i)=>{const ok=answers[i]===q.answer;if(ok){correct++;score+=q.points}document.querySelectorAll(`input[name=q${q.id}]`).forEach(el=>el.disabled=true);const box=$('review'+q.id);box.classList.remove('hidden');box.innerHTML=`<strong class="${ok?'correct':'wrong'}">${ok?'정답':'오답'} · 고른 답 ${'①②③④⑤'[answers[i]-1]} · 정답 ${'①②③④⑤'[q.answer-1]}</strong><div class="explanation">${esc(q.explanation)}</div>`;});$('score').textContent=`${score} / 100점`;$('correctCount').textContent=`맞은 문항 ${correct}개 / 30개`;$('resultIdentity').textContent=$('studentInfo').textContent;$('result').classList.remove('hidden');$('submit').classList.add('hidden');$('submitBottom').classList.add('hidden');$('result').focus();$('result').scrollIntoView({behavior:'smooth'});clearTimeout(debounce);debounce=null;status(connected?'최종 답안 전송을 준비하고 있습니다…':'스프레드시트 미연결');schedule(true);};
+// 여러 학생의 요청이 한순간에 몰리지 않도록 최신 답을 묶어 전송합니다.
+function schedule(final=false){
+ if(!connected){sync();return}
+ if(configBlocked)return;
+ if(busy){queued=true;return}
+ if(debounce!==null&&!final)return;
+ if(debounce!==null)clearTimeout(debounce);
+ const delay=final?1000+Math.random()*6000:Math.max(0,12000-(Date.now()-lastSendAt))+2000+Math.random()*6000;
+ debounce=setTimeout(()=>{debounce=null;sync()},delay);
+}
+function status(msg,error=false){$('syncState').textContent=msg;$('syncState').classList.toggle('error',error)}
+function sync(){
+ if(!connected){status('스프레드시트 미연결 · 이 기기의 답안은 새로고침하면 초기화됩니다.');return}
+ if(configBlocked)return;
+ if(busy){queued=true;return}
+ if(!student || (ackRevision===revision&&(!submitted||finalSaved)))return;
+ if(debounce!==null){clearTimeout(debounce);debounce=null}
+ if(!navigator.onLine){autoRetry('인터넷 연결을 기다리고 있습니다. 연결되면 자동으로 다시 전송합니다.');return}
+ busy=true;queued=false;lastSendAt=Date.now();
+ const requestId=globalThis.crypto?.randomUUID?.()||Math.random().toString(36);
+ const payload={testId:TEST_ID,sessionId,requestId,revision,student,answers:[...answers],submitted,origin:location.origin};
+ const frame=document.createElement('iframe');frame.name='sync_'+requestId;frame.hidden=true;frame.title='답안 전송';document.body.append(frame);
+ const form=document.createElement('form');form.method='POST';form.action=SHEETS_URL;form.target=frame.name;form.hidden=true;
+ const input=document.createElement('input');input.name='payload';input.value=JSON.stringify(payload);form.append(input);document.body.append(form);
+ status(submitted?'최종 답안을 저장하고 있습니다. 완료될 때까지 이 화면을 유지하세요.':'고른 답을 자동 저장하고 있습니다…');$('retry').classList.add('hidden');
+ pending={requestId,frame,form,submitted:payload.submitted,revision:payload.revision,timer:setTimeout(()=>finishSync(false,'아직 저장 확인을 받지 못했습니다.',true),45000)};
+ try{form.submit()}catch(e){finishSync(false,'답안 전송을 시작하지 못했습니다.',true)}
+}
+function autoRetry(msg){
+ $('retry').classList.remove('hidden');
+ if(retryCount>=MAX_AUTO_RETRIES){status('자동 재시도를 마쳤습니다. 답안은 이 화면에 유지됩니다. 인터넷 연결을 확인하고 전송 다시 시도를 눌러 주세요.',true);return}
+ const delay=Math.min(45000,3000*Math.pow(2,retryCount))+Math.random()*6000;retryCount++;
+ status(msg+` ${Math.ceil(delay/1000)}초 뒤 자동으로 다시 시도합니다. (${retryCount}/${MAX_AUTO_RETRIES})`);
+ if(debounce!==null)clearTimeout(debounce);debounce=setTimeout(()=>{debounce=null;sync()},delay);
+}
+function finishSync(ok,msg,retryable=true,serverReply=null){
+ if(!pending)return;
+ const sent=pending;clearTimeout(sent.timer);sent.frame.remove();sent.form.remove();pending=null;busy=false;
+ if(ok){
+  retryCount=0;ackRevision=Math.max(ackRevision,sent.revision);if(sent.submitted)finalSaved=true;
+  status(finalSaved?'최종 답안이 스프레드시트에 저장되었습니다.':(ackRevision===revision?'고른 답이 스프레드시트에 저장되었습니다.':'최근 선택한 답을 자동 저장할 예정입니다.'));
+  $('retry').classList.add('hidden');
+  if(queued||ackRevision<revision){queued=false;schedule(submitted)}
+ }else{
+  queued=false;
+  if(retryable){autoRetry(msg)}else{configBlocked=true;status('전송 설정 확인이 필요합니다: '+msg+' 답안은 이 화면에 유지됩니다. 선생님에게 알려 주세요.',true);$('retry').classList.remove('hidden')}
+ }
+}
+window.addEventListener('message',event=>{
+ let host;try{host=new URL(event.origin).hostname}catch{return}
+ if(!(host==='script.google.com'||host==='script.googleusercontent.com'||host.endsWith('-script.googleusercontent.com')))return;
+ const d=event.data;if(!pending||!d||d.type!=='force-sync'||d.requestId!==pending.requestId)return;
+ // 새 서버는 기록된 수정 번호와 제출 상태까지 확인하여 저장을 알립니다.
+ if(d.ok && (d.revision!==pending.revision || (pending.submitted&&!d.submitted))){finishSync(false,'연결용 스크립트 버전 또는 저장 상태를 확인해 주세요.',false);return}
+ finishSync(d.ok,d.error||'전송 응답을 확인해 주세요.',d.retryable!==false,d);
+});
+$('retry').onclick=()=>{if(busy)return;configBlocked=false;retryCount=0;if(debounce!==null){clearTimeout(debounce);debounce=null}schedule(submitted)};
+window.addEventListener('online',()=>{if(student&&connected&&!configBlocked&&!finalSaved){retryCount=0;schedule(submitted)}});
+$('print').onclick=()=>window.print();$('reset').onclick=()=>{if(confirm('새 응시를 시작합니다. 현재 화면의 답안이 초기화됩니다.'))location.reload()};
+// 줄바꿈과 페이지 분할을 직접 그려 외부 캡처 라이브러리 없이 PNG를 만듭니다.
+function wrapImageText(ctx,text,width){
+ const result=[];
+ for(const paragraph of String(text).split('\n')){
+  if(!paragraph){result.push('');continue}
+  let line='';
+  for(const char of paragraph){if(line&&ctx.measureText(line+char).width>width){result.push(line);line=char}else line+=char}
+  result.push(line);
+ }
+ return result;
+}
+function imageRows(ctx){
+ const rows=[];
+ const add=(text,bold=false,color='#17212f',indent=0)=>{
+  ctx.font=(bold?'bold ':'')+'30px Arial, "Malgun Gothic", sans-serif';
+  wrapImageText(ctx,text,1080-indent).forEach(text=>rows.push({text,bold,color,indent,height:46}));
+ };
+ QUESTIONS.forEach((q,i)=>{
+  const start=rows.length;
+  add(`${q.id}번 (${q.points}점)`,true);add(q.text);
+  q.options.forEach((option,j)=>add(`${'①②③④⑤'[j]} ${option}${answers[i]===j+1?'  [내가 고른 답]':''}`,false,'#17212f',20));
+  rows.push({height:18});
+  const ok=answers[i]===q.answer;
+  add(`고른 답 ${'①②③④⑤'[answers[i]-1]} · 정답 ${'①②③④⑤'[q.answer-1]} · ${ok?'정답':'오답'}`,true,ok?'#176240':'#b42232');
+  add('풀이과정',true);add(q.explanation,false,'#283e54');
+  rows.push({height:40,rule:true});
+  rows[start].blockHeight=rows.slice(start).reduce((total,row)=>total+row.height,0);
+ });return rows;
+}
+function paginateImageRows(rows){
+ const capacity=1900,pages=[];let page=[],height=0;
+ for(const row of rows){
+  // 한 문항이 한 페이지에 들어갈 때에는 문항 중간에서 끊지 않습니다.
+  if(page.length&&((row.blockHeight&&row.blockHeight<=capacity&&height+row.blockHeight>capacity)||height+row.height>capacity)){pages.push(page);page=[];height=0}
+  page.push(row);height+=row.height;
+ }
+ if(page.length)pages.push(page);return pages;
+}
+// 파일을 미리 만들어 두어 버튼을 누르는 순간 기기의 공유 메뉴를 열 수 있습니다.
+function canShareAllPhotos(){
+ try{return photoFiles.length>0&&typeof navigator.share==='function'&&typeof navigator.canShare==='function'&&navigator.canShare({files:photoFiles})}catch{return false}
+}
+function photoControls(){
+ $('saveAllPhotos').classList.toggle('hidden',!canShareAllPhotos());
+ $('downloadAllPhotos').classList.toggle('hidden',photoFiles.length===0);
+ $('photoHelp').textContent=canShareAllPhotos()
+  ?'사진 전체 저장을 누른 뒤 기기의 공유 메뉴에서 이미지 저장 또는 저장할 앱을 선택하세요. 저장 항목은 기기마다 다릅니다.'
+  :'이 기기에서는 전체 PNG 다운로드를 누르세요. 여러 파일 다운로드 허용을 요청하면 허용하세요. 브라우저에 따라 사진 앱 대신 다운로드 폴더에 저장됩니다.';
+}
+$('saveAllPhotos').onclick=async()=>{
+ if(!canShareAllPhotos()){photoControls();return}
+ $('saveAllPhotos').disabled=true;$('capture').disabled=true;$('downloadAllPhotos').disabled=true;
+ try{
+  // 이 호출 앞에서 비동기 이미지 생성을 하지 않아 사용자 클릭 권한을 유지합니다.
+  await navigator.share({files:photoFiles,title:'힘의 작용 · 내가 푼 문제와 풀이'});
+  $('captureStatus').textContent='사진들을 기기의 공유 메뉴로 전달했습니다. 선택한 저장 위치에서 확인하세요.';
+ }catch(error){
+  $('captureStatus').textContent=error.name==='AbortError'
+   ?'공유 메뉴를 닫았습니다. 사진 전체 저장을 다시 누를 수 있습니다.'
+   :'이 기기에서 여러 사진을 공유하지 못했습니다. 전체 PNG 다운로드 또는 각 쪽의 저장 링크를 이용하세요.';
+ }finally{$('saveAllPhotos').disabled=false;$('capture').disabled=false;$('downloadAllPhotos').disabled=false}
+};
+$('downloadAllPhotos').onclick=async()=>{
+ if(!photoFiles.length||downloadingPhotos)return;
+ downloadingPhotos=true;$('downloadAllPhotos').disabled=true;$('capture').disabled=true;$('saveAllPhotos').disabled=true;
+ try{
+  const links=$('imagePages').querySelectorAll('a[download]');
+  for(let i=0;i<links.length;i++){
+   links[i].click();$('captureStatus').textContent=`사진 다운로드 요청: ${i+1} / ${links.length}장`;
+   if(i+1<links.length)await new Promise(resolve=>setTimeout(resolve,500));
+  }
+  $('captureStatus').textContent=`${links.length}장의 PNG 다운로드를 요청했습니다. 브라우저가 여러 파일 저장을 차단하면 허용한 뒤 다시 누르세요. 다운로드 폴더에서 파일 수를 확인하세요.`;
+ }finally{downloadingPhotos=false;$('downloadAllPhotos').disabled=false;$('capture').disabled=false;$('saveAllPhotos').disabled=false}
+};
+$('capture').onclick=async()=>{
+ if(!submitted)return;$('capture').disabled=true;$('imageBox').classList.remove('hidden');$('captureStatus').textContent='문제와 풀이 이미지를 만들고 있습니다…';$('saveAllPhotos').classList.add('hidden');$('downloadAllPhotos').classList.add('hidden');
+ try{
+  if(document.fonts)await document.fonts.ready;
+  imageUrls.forEach(url=>URL.revokeObjectURL(url));imageUrls=[];photoFiles=[];$('imagePages').replaceChildren();
+  const canvas=document.createElement('canvas');canvas.width=1200;const ctx=canvas.getContext('2d');
+  const pages=paginateImageRows(imageRows(ctx));
+  const filename=`힘의작용_1학년${student.classNo}반_${student.number}번_문제와풀이`;
+  for(let n=0;n<pages.length;n++){
+   canvas.height=2200;ctx.fillStyle='#fff';ctx.fillRect(0,0,1200,2200);ctx.textAlign='left';ctx.fillStyle='#17212f';ctx.font='bold 36px Arial, "Malgun Gothic", sans-serif';ctx.fillText('힘의 작용 · 내가 푼 문제와 풀이',60,68);
+   ctx.font='26px Arial, "Malgun Gothic", sans-serif';ctx.fillText($('studentInfo').textContent,60,116);ctx.fillText(`${n+1} / ${pages.length}쪽`,980,116);
+   let y=180;
+   for(const row of pages[n]){
+    if(row.rule){ctx.strokeStyle='#aab4c0';ctx.beginPath();ctx.moveTo(60,y);ctx.lineTo(1140,y);ctx.stroke()}
+    if(row.text){ctx.font=(row.bold?'bold ':'')+'30px Arial, "Malgun Gothic", sans-serif';ctx.fillStyle=row.color;ctx.fillText(row.text,60+row.indent,y)}
+    y+=row.height;
+   }
+   const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('이미지를 만들지 못했습니다.')),'image/png'));
+   const name=`${filename}_${String(n+1).padStart(2,'0')}.png`;if(typeof File==='function')photoFiles.push(new File([blob],name,{type:'image/png'}));else photoFiles.push(blob);
+   const url=URL.createObjectURL(blob);imageUrls.push(url);
+   const figure=document.createElement('figure');figure.style.margin='24px 0';
+   const a=document.createElement('a');a.href=url;a.download=name;a.textContent=`${n+1}쪽 이미지 저장`;
+   const img=document.createElement('img');img.src=url;img.alt=`문제와 풀이 ${n+1}쪽`;img.loading='lazy';img.className='preview-img';figure.append(a,img);$('imagePages').append(figure);
+   $('captureStatus').textContent=`문제와 풀이 이미지 생성 중: ${n+1} / ${pages.length}쪽`;
+   await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  canvas.width=canvas.height=1;
+  photoControls();
+  $('captureStatus').textContent=`30문항의 문제·선지·고른 답·정답·풀이과정을 ${pages.length}장의 사진으로 만들었습니다. ${canShareAllPhotos()?'사진 전체 저장':'전체 PNG 다운로드'}을 누르세요.`;
+  $('imageBox').scrollIntoView({behavior:'smooth'});
+ }catch(error){$('captureStatus').textContent='이미지 생성에 실패했습니다. 다시 누르거나 결과 인쇄 / PDF를 이용하세요.';}
+ finally{$('capture').disabled=false}
+};
+window.addEventListener('beforeunload',e=>{if(student&&(!submitted||(connected&&!finalSaved))){e.preventDefault();e.returnValue='';}});
+</script></main></body></html>
